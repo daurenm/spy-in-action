@@ -25,17 +25,14 @@ class RemotePostsLoader: PostsLoader {
 final class SpyInActionTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromClient() {
-        let url = URL(string: "http://a-url.com")!
-        let client = HTTPClientSpy()
-        _ = RemotePostsLoader(client: client, url: url)
+        let (_, client) = makeSUT()
         
         XCTAssertTrue(client.messages.isEmpty)
     }
     
     func test_load_requestsDataFromGivenURL() {
         let url = URL(string: "http://a-url.com")!
-        let client = HTTPClientSpy()
-        let sut = RemotePostsLoader(client: client, url: url)
+        let (sut, client) = makeSUT(url: url)
         
         sut.load { _ in }
         
@@ -44,6 +41,20 @@ final class SpyInActionTests: XCTestCase {
     
     // MARK: - Helpers
     
+    private func makeSUT(url: URL = URL(string: "http://any-url.com")!) -> (sut: RemotePostsLoader, client: HTTPClientSpy) {
+        let client = HTTPClientSpy()
+        let sut = RemotePostsLoader(client: client, url: url)
+        trackForMemoryLeaks(client)
+        trackForMemoryLeaks(sut)
+        return (sut, client)
+    }
+    
+    private func trackForMemoryLeaks(_ instance: AnyObject) {
+        addTeardownBlock { [weak instance] in
+            XCTAssertNil(instance, "Instance should have been deallocated. Potential Memory Leak")
+        }
+    }
+
     private class HTTPClientSpy: HTTPClient {
         private(set) var messages = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
     
