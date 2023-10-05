@@ -10,6 +10,7 @@
 		296285632ACEEC86003C45F8 /* SpyInAction.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2962855A2ACEEC86003C45F8 /* SpyInAction.framework */; };
 		296285682ACEEC86003C45F8 /* SpyInActionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296285672ACEEC86003C45F8 /* SpyInActionTests.swift */; };
 		296285692ACEEC86003C45F8 /* SpyInAction.h in Headers */ = {isa = PBXBuildFile; fileRef = 2962855D2ACEEC86003C45F8 /* SpyInAction.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		296285732ACEED0B003C45F8 /* PostsLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 296285722ACEED0B003C45F8 /* PostsLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,6 +28,7 @@
 		2962855D2ACEEC86003C45F8 /* SpyInAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SpyInAction.h; sourceTree = "<group>"; };
 		296285622ACEEC86003C45F8 /* SpyInActionTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SpyInActionTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		296285672ACEEC86003C45F8 /* SpyInActionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyInActionTests.swift; sourceTree = "<group>"; };
+		296285722ACEED0B003C45F8 /* PostsLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostsLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +72,7 @@
 			isa = PBXGroup;
 			children = (
 				2962855D2ACEEC86003C45F8 /* SpyInAction.h */,
+				296285722ACEED0B003C45F8 /* PostsLoader.swift */,
 			);
 			path = SpyInAction;
 			sourceTree = "<group>";
@@ -144,6 +147,7 @@
 				TargetAttributes = {
 					296285592ACEEC86003C45F8 = {
 						CreatedOnToolsVersion = 14.3.1;
+						LastSwiftMigration = 1430;
 					};
 					296285612ACEEC86003C45F8 = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -191,6 +195,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				296285732ACEED0B003C45F8 /* PostsLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +341,7 @@
 		2962856D2ACEEC86003C45F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -359,6 +365,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -367,6 +374,7 @@
 		2962856E2ACEEC86003C45F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -398,6 +406,7 @@
 		296285702ACEEC86003C45F8 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7ZVMMF7RSQ;
@@ -414,6 +423,7 @@
 		296285712ACEEC86003C45F8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7ZVMMF7RSQ;
