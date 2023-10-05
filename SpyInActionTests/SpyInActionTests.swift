@@ -8,20 +8,38 @@
 import XCTest
 import SpyInAction
 
-class RemotePostsLoader {
+class RemotePostsLoader: PostsLoader {
     let client: HTTPClient
-    init(client: HTTPClient) {
+    let url: URL
+    
+    init(client: HTTPClient, url: URL) {
         self.client = client
+        self.url = url
+    }
+    
+    func load(completion: @escaping (PostsLoader.Result) -> Void) {
+        client.get(from: url) { _ in }
     }
 }
 
 final class SpyInActionTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromClient() {
+        let url = URL(string: "http://a-url.com")!
         let client = HTTPClientSpy()
-        _ = RemotePostsLoader(client: client)
+        _ = RemotePostsLoader(client: client, url: url)
         
         XCTAssertTrue(client.messages.isEmpty)
+    }
+    
+    func test_load_requestsDataFromGivenURL() {
+        let url = URL(string: "http://a-url.com")!
+        let client = HTTPClientSpy()
+        let sut = RemotePostsLoader(client: client, url: url)
+        
+        sut.load { _ in }
+        
+        XCTAssertEqual(client.messages.map { $0.url }, [url])
     }
     
     // MARK: - Helpers
