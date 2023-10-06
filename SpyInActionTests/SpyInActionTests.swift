@@ -55,20 +55,9 @@ final class SpyInActionTests: XCTestCase {
         let clientError = NSError(domain: "any", code: 0)
         let (sut, client) = makeSUT()
         
-        let exp = expectation(description: "Wait for load")
-        sut.load { result in
-            switch result {
-                case let .failure(error as RemotePostsLoader.Error):
-                    XCTAssertEqual(error, RemotePostsLoader.Error.connectivity)
-                case .success, .failure:
-                    XCTFail("Expected to fail, got \(result) instead")
-            }
-            exp.fulfill()
+        expect(sut, toCompleteWith: .failure(RemotePostsLoader.Error.connectivity)) {
+            client.complete(with: clientError)
         }
-        
-        client.complete(with: clientError)
-        
-        wait(for: [exp], timeout: 1.0)
     }
     
     func test_load_deliversInvalidDataOnNon200HTTPResponse() {
@@ -78,20 +67,9 @@ final class SpyInActionTests: XCTestCase {
         let emptyData = Data()
         
         samples.enumerated().forEach { index, code in
-            let exp = expectation(description: "Wait for load")
-            sut.load { result in
-                switch result {
-                    case let .failure(error as RemotePostsLoader.Error):
-                        XCTAssertEqual(error, RemotePostsLoader.Error.invalidData)
-                    case .success, .failure:
-                        XCTFail("Expected to fail, got \(result) instead")
-                }
-                exp.fulfill()
+            expect(sut, toCompleteWith: .failure(RemotePostsLoader.Error.invalidData)) {
+                client.complete(withStatusCode: code, data: emptyData, at: index)
             }
-            
-            client.complete(withStatusCode: code, data: emptyData, at: index)
-            
-            wait(for: [exp], timeout: 1.0)
         }
     }
     
@@ -111,6 +89,28 @@ final class SpyInActionTests: XCTestCase {
         }
     }
     
+    private func expect(
+        _ sut: RemotePostsLoader,
+        toCompleteWith expectedResult: PostsLoader.Result,
+        when action: () -> Void
+    ) {
+        let exp = expectation(description: "Wait for load")
+        sut.load { receivedResult in
+            switch (receivedResult, expectedResult) {
+                case let (.success(receivedItems), .success(expectedItems)):
+                    XCTAssertEqual(receivedItems, expectedItems)
+                case let (.failure(receivedError as RemotePostsLoader.Error), .failure(expectedError as RemotePostsLoader.Error)):
+                    XCTAssertEqual(receivedError, expectedError)
+                default:
+                    XCTFail("Expected \(expectedResult), got \(receivedResult) instead")
+            }
+            exp.fulfill()
+        }
+        
+        action()
+        wait(for: [exp], timeout: 1.0)
+    }
+
     private class HTTPClientSpy: HTTPClient {
         private(set) var messages = [(url: URL, completion: (HTTPClient.Result) -> Void)]()
         
